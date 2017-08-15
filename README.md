@@ -1,3 +1,7 @@
+## Installing
+1. Create supervisor log files if they don't exists (see supervisor.conf)
+2. Start supervisor: ```sudo supervisorctl restart all```
+
 ## Creating git repo
 
 1. Create repo in GitHub
