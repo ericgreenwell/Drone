@@ -26,7 +26,7 @@ DEPLOY = 20
 GPIO.setup(DEPLOY, GPIO.OUT)
 
 ## Broadcast settings
-STATION = "101.1"
+STATION = "103.3"
 # Allow time for start up
 time.sleep(5)
 
@@ -39,11 +39,11 @@ def eSpeak(s):
 value = MCP.read_adc(7)
 if value > 100:
     eSpeak("please turn the lights off before we continue, I will wait 10 seconds to allow for this")
-    # os.system("espeak 'please turn the lights off before we continue, I will wait 10 seconds to allow for this'")
+    os.system("espeak 'please turn the lights off before we continue, I will wait 10 seconds to allow for this'")
     time.sleep(10)
 
 # Instructions
-# os.system("espeak 'when you initiate my LEDS with the C2 button on the back of the controller I will initiate broadcast and deploy leaflets'")
+os.system("espeak 'when you initiate my LEDS with the C2 button on the back of the controller I will initiate broadcast and deploy leaflets'")
 eSpeak("when you initiate my LEDS with the C2 button on the back of the controller "
        "I will initiate broadcast and deploy leaflets")
 
@@ -52,7 +52,7 @@ eSpeak("when you initiate my LEDS with the C2 button on the back of the controll
 if __name__ == "__main__":
 
     broadcast_process = None
-
+    
     while True:
         value = 151 #MCP.read_adc(7)
 
@@ -63,19 +63,15 @@ if __name__ == "__main__":
 
             if not broadcast_process:
                 print(">>> Starting broadcast...")
-                # broadcast_process = subprocess.Popen("sudo ./pifm sound.wav {}".format(STATION),
-                #                                      stdout=subprocess.PIPE,
-                #                                      shell=True)
+                broadcast_process = subprocess.Popen("sudo ./pifm sound.wav {}".format(STATION),stdout=subprocess.PIPE, shell=True)
                 broadcast_process = subprocess.Popen("sudo omxplayer sound.wav", stdout=subprocess.PIPE, shell=True)
             else:
                 proc = broadcast_process.poll()
                 if proc:  # process died
                     print(">>> Broadcast died..restarting broadcast...")
-                    # broadcast_process = subprocess.Popen("sudo ./pifm sound.wav {}".format(STATION),
-                    #                                      stdout=subprocess.PIPE,
-                    #                                      shell=True)
+                    broadcast_process = subprocess.Popen("sudo ./pifm sound.wav {}".format(STATION), stdout=subprocess.PIPE, shell=True)
 
-                    broadcast_process = subprocess.Popen("sudo omxplayer sound.wav", stdout=subprocess.PIPE, shell=True)
+                    #broadcast_process = subprocess.Popen("sudo omxplayer sound.wav", stdout=subprocess.PIPE, shell=True)
 
         else:
             GPIO.output(DEPLOY, False)
